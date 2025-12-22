@@ -351,6 +351,35 @@
             width: 60px;
             margin-left: -30px;
         }
+        .rationale-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .rationale-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .rationale-item h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #28a745;
+            font-size: 1.1em;
+        }
+        .rationale-item p {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        .rationale-item p:last-child {
+            margin-bottom: 0;
+        }
+        .rationale-item strong {
+            color: #495057;
+        }
         .weather-data {
             background: #fff3cd;
             padding: 20px;
@@ -391,66 +420,72 @@
         </div>
 
         <div class="section">
-            <h2>評価分析</h2>
-            <div class="chart-container">
-                <div class="chart-box">
-                    <h3>レーダーチャート評価</h3>
-                    <div class="simple-radar">
-                        <div class="radar-center">
-                            <div class="radar-line" style="transform: rotate(0deg) scale(0.8);"></div>
-                            <div class="radar-line" style="transform: rotate(72deg) scale(0.8);"></div>
-                            <div class="radar-line" style="transform: rotate(144deg) scale(0.8);"></div>
-                            <div class="radar-line" style="transform: rotate(216deg) scale(0.8);"></div>
-                            <div class="radar-line" style="transform: rotate(288deg) scale(0.8);"></div>
-                            <div class="radar-point" style="transform: rotate(0deg) translateX(80px);"></div>
-                            <div class="radar-point" style="transform: rotate(72deg) translateX(70px);"></div>
-                            <div class="radar-point" style="transform: rotate(144deg) translateX(90px);"></div>
-                            <div class="radar-point" style="transform: rotate(216deg) translateX(60px);"></div>
-                            <div class="radar-point" style="transform: rotate(288deg) translateX(80px);"></div>
-                            <div class="radar-labels">
-                                <div class="label" style="transform: rotate(0deg) translateY(-120px);">情報正確性<br>4.0</div>
-                                <div class="label" style="transform: rotate(72deg) translateY(-120px);">視覚的表現<br>3.5</div>
-                                <div class="label" style="transform: rotate(144deg) translateY(-120px);">日本語表示<br>4.5</div>
-                                <div class="label" style="transform: rotate(216deg) translateY(-120px);">情報整理<br>3.0</div>
-                                <div class="label" style="transform: rotate(288deg) translateY(-120px);">実用性<br>4.0</div>
-                            </div>
-                        </div>
+            <h2>評価スコア分布</h2>
+            <div class="css-chart">
+                <div class="chart-bar">
+                    <div class="bar-label">情報正確性</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 80%; background: #36a2eb;">4.0/5.0</div>
                     </div>
                 </div>
-                <div class="chart-box">
-                    <h3>評価スコア分布</h3>
-                    <div class="css-chart">
-                        <div class="chart-bar">
-                            <div class="bar-label">情報正確性</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 80%; background: #36a2eb;">4.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">視覚的表現</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 70%; background: #ff6384;">3.5/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">日本語表示</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 90%; background: #ffce56;">4.5/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">情報整理</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 60%; background: #4bc0c0;">3.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">実用性</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 80%; background: #9966ff;">4.0/5.0</div>
-                            </div>
-                        </div>
+                <div class="chart-bar">
+                    <div class="bar-label">視覚的表現</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 70%; background: #ff6384;">3.5/5.0</div>
                     </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">日本語表示</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 90%; background: #ffce56;">4.5/5.0</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">情報整理</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 60%; background: #4bc0c0;">3.0/5.0</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">実用性</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 80%; background: #9966ff;">4.0/5.0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>評価根拠と分析</h2>
+            <div class="rationale-container">
+                <div class="rationale-item">
+                    <h3>📊 情報正確性: 4.0/5.0</h3>
+                    <p><strong>根拠:</strong> 2025年12月22日の実際の天気データ（気温1°C、最高4°C/最低-2°C、曇り時々晴れ、北西の風3-5m/s）は正確に反映されている。</p>
+                    <p><strong>減点理由:</strong> 降水確率20-30%や湿度65%などの詳細情報が省略されており、完全な天気情報としては不足している。</p>
+                </div>
+
+                <div class="rationale-item">
+                    <h3>🎨 視覚的表現: 3.5/5.0</h3>
+                    <p><strong>根拠:</strong> 天気アイコンや温度計などの基本的な視覚要素は含まれており、インフォグラフィックの形式は理解できる。</p>
+                    <p><strong>減点理由:</strong> プロフェッショナルな情報デザインとしての質が低い。色彩構成が統一されておらず、タイポグラフィの階層構造が不明確。視覚的なインパクトに乏しい。</p>
+                </div>
+
+                <div class="rationale-item">
+                    <h3>📝 日本語表示: 4.5/5.0</h3>
+                    <p><strong>根拠:</strong> 日本語での表示は正確で読みやすく、「曇り時々晴れ」のような気象用語も適切に使用されている。</p>
+                    <p><strong>減点理由:</strong> より分かりやすい表現や、専門用語の補足説明があればさらに良くなった可能性がある。</p>
+                </div>
+
+                <div class="rationale-item">
+                    <h3>📐 情報整理: 3.0/5.0</h3>
+                    <p><strong>根拠:</strong> 基本的な天気情報は含まれているが、情報の優先順位付けが不十分。</p>
+                    <p><strong>減点理由:</strong> 重要度の高い情報（現在の気温、天気）と補足情報の区別が不明確。視覚的なグルーピングや階層構造が欠けており、ユーザーが必要な情報をすぐに見つけられない。</p>
+                </div>
+
+                <div class="rationale-item">
+                    <h3>🎯 実用性: 4.0/5.0</h3>
+                    <p><strong>根拠:</strong> 当日の基本的な天気情報を提供しており、外出の際の参考にはなる。</p>
+                    <p><strong>減点理由:</strong> 実用的な付加情報（服装の提案、傘の必要性、紫外線指数など）が含まれていない。天気情報から具体的な行動指針を導き出すには情報が不足している。</p>
                 </div>
             </div>
         </div>

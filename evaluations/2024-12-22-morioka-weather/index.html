@@ -357,65 +357,36 @@
         </div>
 
         <div class="section">
-            <h2>評価分析</h2>
-            <div class="chart-container">
-                <div class="chart-box">
-                    <h3>レーダーチャート評価</h3>
-                    <div class="simple-radar">
-                        <div class="radar-center">
-                            <div class="radar-line" style="transform: rotate(0deg) scale(1.0);"></div>
-                            <div class="radar-line" style="transform: rotate(72deg) scale(1.0);"></div>
-                            <div class="radar-line" style="transform: rotate(144deg) scale(1.0);"></div>
-                            <div class="radar-line" style="transform: rotate(216deg) scale(1.0);"></div>
-                            <div class="radar-line" style="transform: rotate(288deg) scale(1.0);"></div>
-                            <div class="radar-point" style="transform: rotate(0deg) translateX(100px);"></div>
-                            <div class="radar-point" style="transform: rotate(72deg) translateX(100px);"></div>
-                            <div class="radar-point" style="transform: rotate(144deg) translateX(100px);"></div>
-                            <div class="radar-point" style="transform: rotate(216deg) translateX(100px);"></div>
-                            <div class="radar-point" style="transform: rotate(288deg) translateX(100px);"></div>
-                            <div class="radar-labels">
-                                <div class="label" style="transform: rotate(0deg) translateY(-120px);">天候表現<br>5.0</div>
-                                <div class="label" style="transform: rotate(72deg) translateY(-120px);">文化的文脈<br>5.0</div>
-                                <div class="label" style="transform: rotate(144deg) translateY(-120px);">詳細度<br>5.0</div>
-                                <div class="label" style="transform: rotate(216deg) translateY(-120px);">構図<br>5.0</div>
-                                <div class="label" style="transform: rotate(288deg) translateY(-120px);">現実性<br>5.0</div>
-                            </div>
-                        </div>
+            <h2>評価スコア分布</h2>
+            <div class="css-chart">
+                <div class="chart-bar">
+                    <div class="bar-label">天候表現</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: #36a2eb;">5.0/5.0</div>
                     </div>
                 </div>
-                <div class="chart-box">
-                    <h3>評価スコア分布</h3>
-                    <div class="css-chart">
-                        <div class="chart-bar">
-                            <div class="bar-label">天候表現</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #36a2eb;">5.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">文化的文脈</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #ff6384;">5.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">詳細度</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #ffce56;">5.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">構図</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #4bc0c0;">5.0/5.0</div>
-                            </div>
-                        </div>
-                        <div class="chart-bar">
-                            <div class="bar-label">現実性</div>
-                            <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #9966ff;">5.0/5.0</div>
-                            </div>
-                        </div>
+                <div class="chart-bar">
+                    <div class="bar-label">文化的文脈</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: #ff6384;">5.0/5.0</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">詳細度</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: #ffce56;">5.0/5.0</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">構図</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: #4bc0c0;">5.0/5.0</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="bar-label">現実性</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%; background: #9966ff;">5.0/5.0</div>
                     </div>
                 </div>
             </div>
