@@ -258,6 +258,60 @@
             color: #28a745;
             font-size: 0.9em;
         }
+        .simple-radar {
+            width: 280px;
+            height: 280px;
+            margin: 20px auto;
+            position: relative;
+        }
+        .radar-center {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(40, 167, 69, 0.1) 72deg, transparent 72deg, rgba(40, 167, 69, 0.1) 144deg, transparent 144deg, rgba(40, 167, 69, 0.1) 216deg, transparent 216deg, rgba(40, 167, 69, 0.1) 288deg, transparent 288deg);
+            border-radius: 50%;
+            border: 2px solid rgba(40, 167, 69, 0.3);
+        }
+        .radar-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 2px;
+            background: rgba(40, 167, 69, 0.2);
+            transform-origin: 0 0;
+        }
+        .radar-point {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            transform-origin: 0 0;
+            border: 2px solid white;
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+        }
+        .radar-labels {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #495057;
+            transform-origin: 0 0;
+            width: 60px;
+            margin-left: -30px;
+        }
         .evaluation-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -307,7 +361,27 @@
             <div class="chart-container">
                 <div class="chart-box">
                     <h3>レーダーチャート評価</h3>
-                    <canvas id="radarChart" width="350" height="350"></canvas>
+                    <div class="simple-radar">
+                        <div class="radar-center">
+                            <div class="radar-line" style="transform: rotate(0deg) scale(1.0);"></div>
+                            <div class="radar-line" style="transform: rotate(72deg) scale(1.0);"></div>
+                            <div class="radar-line" style="transform: rotate(144deg) scale(1.0);"></div>
+                            <div class="radar-line" style="transform: rotate(216deg) scale(1.0);"></div>
+                            <div class="radar-line" style="transform: rotate(288deg) scale(1.0);"></div>
+                            <div class="radar-point" style="transform: rotate(0deg) translateX(100px);"></div>
+                            <div class="radar-point" style="transform: rotate(72deg) translateX(100px);"></div>
+                            <div class="radar-point" style="transform: rotate(144deg) translateX(100px);"></div>
+                            <div class="radar-point" style="transform: rotate(216deg) translateX(100px);"></div>
+                            <div class="radar-point" style="transform: rotate(288deg) translateX(100px);"></div>
+                            <div class="radar-labels">
+                                <div class="label" style="transform: rotate(0deg) translateY(-120px);">天候表現<br>5.0</div>
+                                <div class="label" style="transform: rotate(72deg) translateY(-120px);">文化的文脈<br>5.0</div>
+                                <div class="label" style="transform: rotate(144deg) translateY(-120px);">詳細度<br>5.0</div>
+                                <div class="label" style="transform: rotate(216deg) translateY(-120px);">構図<br>5.0</div>
+                                <div class="label" style="transform: rotate(288deg) translateY(-120px);">現実性<br>5.0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="chart-box">
                     <h3>評価スコア分布</h3>
@@ -487,68 +561,5 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script>
-        // レーダーチャート
-        const radarCtx = document.getElementById('radarChart').getContext('2d');
-        new Chart(radarCtx, {
-            type: 'radar',
-            data: {
-                labels: ['天候表現', '文化的文脈', '詳細度', '構図', '現実性'],
-                datasets: [{
-                    label: '評価スコア',
-                    data: [5.0, 5.0, 5.0, 5.0, 5.0],
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)',
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 5,
-                        min: 0,
-                        ticks: {
-                            stepSize: 1,
-                            font: {
-                                size: 10
-                            }
-                        },
-                        pointLabels: {
-                            font: {
-                                size: 12
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        },
-                        angleLines: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.label + ': ' + context.raw + '/5.0';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-  </body>
+      </body>
 </html>
