@@ -306,34 +306,8 @@
             <h2>評価分析</h2>
             <div class="chart-container">
                 <div class="chart-box">
-                    <h3>総合評価スコア</h3>
-                    <div class="score-summary">
-                        <div class="score-item">
-                            <div class="score-label">天候表現</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">文化的文脈</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">詳細度</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">構図</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">現実性</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                    </div>
+                    <h3>レーダーチャート評価</h3>
+                    <canvas id="radarChart" width="350" height="350"></canvas>
                 </div>
                 <div class="chart-box">
                     <h3>評価スコア分布</h3>
@@ -513,5 +487,68 @@
         </div>
     </div>
 
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // レーダーチャート
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['天候表現', '文化的文脈', '詳細度', '構図', '現実性'],
+                datasets: [{
+                    label: '評価スコア',
+                    data: [5.0, 5.0, 5.0, 5.0, 5.0],
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        min: 0,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 10
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '/5.0';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+  </body>
 </html>

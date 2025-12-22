@@ -341,30 +341,7 @@
             <div class="chart-container">
                 <div class="chart-box">
                     <h3>レーダーチャート評価</h3>
-                    <div class="css-radar-chart">
-                        <div class="radar-center">
-                            <div class="radar-item" style="transform: rotate(0deg) translateX(100px) rotate(0deg);">
-                                <div class="radar-label">情報正確性</div>
-                                <div class="radar-score">4.0</div>
-                            </div>
-                            <div class="radar-item" style="transform: rotate(72deg) translateX(100px) rotate(-72deg);">
-                                <div class="radar-label">視覚的表現</div>
-                                <div class="radar-score">3.5</div>
-                            </div>
-                            <div class="radar-item" style="transform: rotate(144deg) translateX(100px) rotate(-144deg);">
-                                <div class="radar-label">日本語表示</div>
-                                <div class="radar-score">4.5</div>
-                            </div>
-                            <div class="radar-item" style="transform: rotate(216deg) translateX(100px) rotate(-216deg);">
-                                <div class="radar-label">情報整理</div>
-                                <div class="radar-score">3.0</div>
-                            </div>
-                            <div class="radar-item" style="transform: rotate(288deg) translateX(100px) rotate(-288deg);">
-                                <div class="radar-label">実用性</div>
-                                <div class="radar-score">4.0</div>
-                            </div>
-                        </div>
-                    </div>
+                    <canvas id="radarChart" width="350" height="350"></canvas>
                 </div>
                 <div class="chart-box">
                     <h3>評価スコア分布</h3>
@@ -558,5 +535,68 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // レーダーチャート
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['情報正確性', '視覚的表現', '日本語表示', '情報整理', '実用性'],
+                datasets: [{
+                    label: '評価スコア',
+                    data: [4.0, 3.5, 4.5, 3.0, 4.0],
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        min: 0,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 10
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '/5.0';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
   </body>
 </html>
