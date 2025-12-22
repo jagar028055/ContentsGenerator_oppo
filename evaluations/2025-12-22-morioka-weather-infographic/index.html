@@ -196,6 +196,68 @@
             color: #28a745;
             margin: 30px 0;
         }
+        .css-chart {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .chart-bar {
+            margin-bottom: 15px;
+        }
+        .bar-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        .bar-container {
+            background: #e9ecef;
+            border-radius: 4px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85em;
+            transition: width 0.3s ease;
+        }
+        .score-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .score-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #28a745;
+        }
+        .score-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .score-value {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .score-number {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 0.9em;
+        }
         .weather-data {
             background: #fff3cd;
             padding: 20px;
@@ -239,12 +301,69 @@
             <h2>評価分析</h2>
             <div class="chart-container">
                 <div class="chart-box">
-                    <h3>レーダーチャート評価</h3>
-                    <canvas id="radarChart" class="radar-canvas" width="400" height="400"></canvas>
+                    <h3>総合評価スコア</h3>
+                    <div class="score-summary">
+                        <div class="score-item">
+                            <div class="score-label">情報正確性</div>
+                            <div class="score-value">⭐⭐⭐⭐⭐</div>
+                            <div class="score-number">5.0/5.0</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">視覚的表現</div>
+                            <div class="score-value">⭐⭐⭐⭐⭐</div>
+                            <div class="score-number">5.0/5.0</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">日本語表示</div>
+                            <div class="score-value">⭐⭐⭐⭐⭐</div>
+                            <div class="score-number">5.0/5.0</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">情報整理</div>
+                            <div class="score-value">⭐⭐⭐⭐⭐</div>
+                            <div class="score-number">5.0/5.0</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">実用性</div>
+                            <div class="score-value">⭐⭐⭐⭐⭐</div>
+                            <div class="score-number">5.0/5.0</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="chart-box">
                     <h3>評価スコア分布</h3>
-                    <canvas id="scoreChart" width="400" height="400"></canvas>
+                    <div class="css-chart">
+                        <div class="chart-bar">
+                            <div class="bar-label">情報正確性</div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%; background: #36a2eb;">5.0/5.0</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">視覚的表現</div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%; background: #ff6384;">5.0/5.0</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">日本語表示</div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%; background: #ffce56;">5.0/5.0</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">情報整理</div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%; background: #4bc0c0;">5.0/5.0</div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">実用性</div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 100%; background: #9966ff;">5.0/5.0</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -403,91 +522,5 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    <script>
-        // レーダーチャート
-        const radarCtx = document.getElementById('radarChart').getContext('2d');
-        new Chart(radarCtx, {
-            type: 'radar',
-            data: {
-                labels: ['情報正確性', '視覚的表現', '日本語表示', '情報整理', '実用性'],
-                datasets: [{
-                    label: '評価スコア',
-                    data: [5.0, 5.0, 5.0, 5.0, 5.0],
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 5,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // スコア分布チャート
-        const scoreCtx = document.getElementById('scoreChart').getContext('2d');
-        new Chart(scoreCtx, {
-            type: 'bar',
-            data: {
-                labels: ['情報正確性', '視覚的表現', '日本語表示', '情報整理', '実用性'],
-                datasets: [{
-                    label: '評価スコア',
-                    data: [5.0, 5.0, 5.0, 5.0, 5.0],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 5,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    </script>
-</body>
+  </body>
 </html>
