@@ -81,12 +81,14 @@ ContentsGenerator/
       "type": "http",
       "url": "https://kamui-code.ai/t2i/fal/nano-banana-pro",
       "headers": {
-        "KAMUI-CODE-PASS": "kamui-pass-2025-7568"
+        "KAMUI-CODE-PASS": "[認証情報]"
       }
     }
   }
 }
 ```
+
+**⚠️ セキュリティ注意:** MCPサーバーの認証情報はセキュリティのため公開しておりません。
 
 ## 🎯 プロジェクト目標
 
