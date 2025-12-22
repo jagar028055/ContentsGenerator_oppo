@@ -258,6 +258,45 @@
             color: #28a745;
             font-size: 0.9em;
         }
+        .css-radar-chart {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            background: radial-gradient(circle, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 50%, transparent 50%);
+            border-radius: 50%;
+        }
+        .radar-center {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .radar-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            text-align: center;
+            transform-origin: 0 0;
+        }
+        .radar-label {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        .radar-score {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            margin: 0 auto;
+            border: 2px solid #28a745;
+        }
         .weather-data {
             background: #fff3cd;
             padding: 20px;
@@ -286,7 +325,7 @@
         </div>
 
         <div class="overall-score">
-            A+
+            B+
         </div>
 
         <div class="section">
@@ -301,32 +340,29 @@
             <h2>評価分析</h2>
             <div class="chart-container">
                 <div class="chart-box">
-                    <h3>総合評価スコア</h3>
-                    <div class="score-summary">
-                        <div class="score-item">
-                            <div class="score-label">情報正確性</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">視覚的表現</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">日本語表示</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">情報整理</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
-                        </div>
-                        <div class="score-item">
-                            <div class="score-label">実用性</div>
-                            <div class="score-value">⭐⭐⭐⭐⭐</div>
-                            <div class="score-number">5.0/5.0</div>
+                    <h3>レーダーチャート評価</h3>
+                    <div class="css-radar-chart">
+                        <div class="radar-center">
+                            <div class="radar-item" style="transform: rotate(0deg) translateX(100px) rotate(0deg);">
+                                <div class="radar-label">情報正確性</div>
+                                <div class="radar-score">4.0</div>
+                            </div>
+                            <div class="radar-item" style="transform: rotate(72deg) translateX(100px) rotate(-72deg);">
+                                <div class="radar-label">視覚的表現</div>
+                                <div class="radar-score">3.5</div>
+                            </div>
+                            <div class="radar-item" style="transform: rotate(144deg) translateX(100px) rotate(-144deg);">
+                                <div class="radar-label">日本語表示</div>
+                                <div class="radar-score">4.5</div>
+                            </div>
+                            <div class="radar-item" style="transform: rotate(216deg) translateX(100px) rotate(-216deg);">
+                                <div class="radar-label">情報整理</div>
+                                <div class="radar-score">3.0</div>
+                            </div>
+                            <div class="radar-item" style="transform: rotate(288deg) translateX(100px) rotate(-288deg);">
+                                <div class="radar-label">実用性</div>
+                                <div class="radar-score">4.0</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -336,31 +372,31 @@
                         <div class="chart-bar">
                             <div class="bar-label">情報正確性</div>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #36a2eb;">5.0/5.0</div>
+                                <div class="bar-fill" style="width: 80%; background: #36a2eb;">4.0/5.0</div>
                             </div>
                         </div>
                         <div class="chart-bar">
                             <div class="bar-label">視覚的表現</div>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #ff6384;">5.0/5.0</div>
+                                <div class="bar-fill" style="width: 70%; background: #ff6384;">3.5/5.0</div>
                             </div>
                         </div>
                         <div class="chart-bar">
                             <div class="bar-label">日本語表示</div>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #ffce56;">5.0/5.0</div>
+                                <div class="bar-fill" style="width: 90%; background: #ffce56;">4.5/5.0</div>
                             </div>
                         </div>
                         <div class="chart-bar">
                             <div class="bar-label">情報整理</div>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #4bc0c0;">5.0/5.0</div>
+                                <div class="bar-fill" style="width: 60%; background: #4bc0c0;">3.0/5.0</div>
                             </div>
                         </div>
                         <div class="chart-bar">
                             <div class="bar-label">実用性</div>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: 100%; background: #9966ff;">5.0/5.0</div>
+                                <div class="bar-fill" style="width: 80%; background: #9966ff;">4.0/5.0</div>
                             </div>
                         </div>
                     </div>
@@ -430,28 +466,28 @@
             <div class="evaluation-grid">
                 <div class="evaluation-item">
                     <h3>📊 情報正確性</h3>
-                    <div class="score">5.0/5.0</div>
-                    <p>2025年12月22日の正確な天気データを正しく反映。気温、天気、風速などの情報が正確に表示。</p>
+                    <div class="score">4.0/5.0</div>
+                    <p>2025年12月22日の天気データは概ね正確だが、一部数値が簡略化されており、詳細な予報情報が不足している。</p>
                 </div>
                 <div class="evaluation-item">
                     <h3>🎨 視覚的表現</h3>
-                    <div class="score">5.0/5.0</div>
-                    <p>インフォグラフィックとして天気アイコン、温度計、風向きなどを適切に視覚化。</p>
+                    <div class="score">3.5/5.0</div>
+                    <p>基本的な天気アイコンは含まれているが、プロフェッショナルなインフォグラフィックデザインとしては質が低い。色彩構成やタイポグラフィに改善の余地あり。</p>
                 </div>
                 <div class="evaluation-item">
                     <h3>📝 日本語表示</h3>
-                    <div class="score">5.0/5.0</div>
-                    <p>日本語で天気情報を分かりやすく表現。専門用語も適切に使用。</p>
+                    <div class="score">4.5/5.0</div>
+                    <p>日本語の表示は正確で読みやすい。ただし、より専門的な気象用語の使用や分かりやすい表現の工夫が必要。</p>
                 </div>
                 <div class="evaluation-item">
                     <h3>📐 情報整理</h3>
-                    <div class="score">5.0/5.0</div>
-                    <p>複数の天気要素を論理的に整理し、見やすいレイアウトで配置。</p>
+                    <div class="score">3.0/5.0</div>
+                    <p>情報の階層構造が不明確で、重要度に応じた配置ができていない。視覚的なグルーピングと情報の優先順位付けに改善が必要。</p>
                 </div>
                 <div class="evaluation-item">
                     <h3>🎯 実用性</h3>
-                    <div class="score">5.0/5.0</div>
-                    <p>天気情報として実際に役立つ内容を網羅。実用的なインフォグラフィック。</p>
+                    <div class="score">4.0/5.0</div>
+                    <p>基本的な天気情報は提供しているが、服装の提案や活動の目安など、実用的な付加情報が不足している。</p>
                 </div>
             </div>
         </div>
