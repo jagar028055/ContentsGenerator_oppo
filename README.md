@@ -68,27 +68,9 @@ ContentsGenerator/
 
 ### 使用モデル
 - **モデル**: Nano Banana Pro (Gemini 2.5 Flash Image model)
-- **MCPサーバー**: t2i-kamui-fal-nano-banana-pro
 - **解像度**: 1K (1376x768) 標準
 - **フォーマット**: PNG
 - **アスペクト比**: 16:9 (ワイド)
-
-### MCPサーバー設定
-```json
-{
-  "mcpServers": {
-    "t2i-kamui-fal-nano-banana-pro": {
-      "type": "http",
-      "url": "https://kamui-code.ai/t2i/fal/nano-banana-pro",
-      "headers": {
-        "KAMUI-CODE-PASS": "[認証情報]"
-      }
-    }
-  }
-}
-```
-
-**⚠️ セキュリティ注意:** MCPサーバーの認証情報はセキュリティのため公開しておりません。
 
 ## 🎯 プロジェクト目標
 
