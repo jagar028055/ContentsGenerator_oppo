@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxモデル拡張比較評価 | MCP画像生成評価レポート</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #e9ecef;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .evaluation-id {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .subtitle {
+            color: #6c757d;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .report-info {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4edda 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid #17a2b8;
+            font-size: 1.05em;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .model-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .model-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+        .model-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .model-content {
+            padding: 25px;
+        }
+        .model-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .model-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-pro { background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: #000; }
+        .badge-dev { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: #fff; }
+        .badge-flex { background: linear-gradient(135deg, #28a745 0%, #218838 100%); color: #fff; }
+        .badge-lora { background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); color: #fff; }
+        .badge-nano { background: linear-gradient(135deg, #e83e8c 0%, #d63384 100%); color: #fff; }
+        .badge-edit { background: linear-gradient(135deg, #fd7e14 0%, #e86c0b 100%); color: #fff; }
+        .model-specs {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .model-specs div {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+        }
+        .evaluation-summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .evaluation-score {
+            font-size: 2.2em;
+            font-weight: 800;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .score-a { color: #28a745; }
+        .score-b { color: #ffc107; }
+        .score-c { color: #dc3545; }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .winner {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            font-weight: 700;
+            position: relative;
+        }
+        .rank-1 { color: #ffd700; font-size: 1.3em; }
+        .rank-2 { color: #c0c0c0; font-size: 1.2em; }
+        .rank-3 { color: #cd7f32; font-size: 1.1em; }
+        .rank-4 { color: #8b4513; }
+        .rank-5 { color: #696969; }
+        .rank-6 { color: #4a4a4a; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05em;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #f0f0f0;
+            transform: translateX(-5px);
+        }
+        .conclusion {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #ffc107;
+            margin: 30px 0;
+        }
+        .conclusion h3 {
+            margin-top: 0;
+            color: #856404;
+            font-size: 1.5em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+        }
+        .category-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .category-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .best-choice {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        .best-choice h2 {
+            margin: 0 0 15px 0;
+            font-size: 2em;
+        }
+        .best-choice p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .emoji-large {
+            font-size: 3em;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .summary-card .emoji {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .summary-card h4 {
+            color: #2c3e50;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .summary-card p {
+            color: #6c757d;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="evaluation-id">評価 #004 - 拡張モデル比較</div>
+            <a href="../../index.html" class="back-link">← トップに戻る</a>
+            <h1>🤖 Fluxシリーズ拡張比較評価</h1>
+            <div class="subtitle">6モデルが激突！画質・速度・コスパ最強は？</div>
+            <div>評価日時: 2025年12月23日</div>
+        </div>
+
+        <div class="report-info">
+            <strong>🎯 評価目的:</strong> Fluxシリーズの主要6モデル（Text-to-Image, Pro, Flex, LoRA, Pro Edit, Nano Banana Pro）を同一プロンプトで比較。画質、速度、コストパフォーマンス、日本語対応を徹底評価。
+        </div>
+
+        <div class="best-choice">
+            <div class="emoji-large">🏆</div>
+            <h2>総合優勝: Flux-2 Text-to-Image</h2>
+            <p>速度・品質・コストパフォーマンスの三冠王者！</p>
+            <p>日本語インフォグラフィック生成の最適解</p>
+        </div>
+
+        <div class="section">
+            <h2>📸 生成画像ギャラリー</h2>
+            <div class="comparison-grid">
+                <!-- Text-to-Image -->
+                <div class="model-card">
+                    <img src="flux-2-text-to-image.png" alt="Flux-2 Text-to-Image" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Flux-2 Text-to-Image
+                            <span class="rank-1">🥇</span>
+                        </div>
+                        <span class="model-badge badge-dev">FLUX.2 [dev]</span>
+                        <div class="model-specs">
+                            <div>⏱️ <strong>2.53秒</strong></div>
+                            <div>📁 905KB (PNG)</div>
+                            <div>📐 1024x768 px</div>
+                            <div>💰 低コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-a">A+</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                日本語テキスト正確に表示。インフォグラフィックとして最適。速度と品質の絶対的バランス。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LoRA -->
+                <div class="model-card">
+                    <img src="flux-2-lora.png" alt="Flux-2 LoRA" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Flux-2 LoRA
+                            <span class="rank-2">🥈</span>
+                        </div>
+                        <span class="model-badge badge-lora">LoRA</span>
+                        <div class="model-specs">
+                            <div>⏱️ <strong>2.09秒</strong></div>
+                            <div>📁 877KB (PNG)</div>
+                            <div>📐 1024x768 px</div>
+                            <div>💰 低コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-a">A</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                最速の2.09秒！スタイル一貫性抜群。日本語対応良好。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nano Banana Pro -->
+                <div class="model-card">
+                    <img src="nano-banana-pro.png" alt="Nano Banana Pro" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Nano Banana Pro
+                            <span class="rank-3">🥉</span>
+                        </div>
+                        <span class="model-badge badge-nano">Gemini 2.5 Flash</span>
+                        <div class="model-specs">
+                            <div>⏱️ <strong>14.86秒</strong></div>
+                            <div>📁 984KB (PNG)</div>
+                            <div>📐 1200x896 px</div>
+                            <div>💰 中コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-b">B+</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                最高解像度。Googleの最新技術。アーティスティックな表現。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro -->
+                <div class="model-card">
+                    <img src="flux-2-pro.jpg" alt="Flux-2 Pro" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Flux-2 Pro
+                            <span class="rank-4">4位</span>
+                        </div>
+                        <span class="model-badge badge-pro">FLUX.2 [pro]</span>
+                        <div class="model-specs">
+                            <div>⏱️ 10.81秒</div>
+                            <div>📁 214KB (JPEG)</div>
+                            <div>📐 1024x768 px</div>
+                            <div>💰 高コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-b">B</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                画質は最高級。インフォグラフィックには不向き。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Edit -->
+                <div class="model-card">
+                    <img src="flux-2-pro-edit.jpg" alt="Flux-2 Pro Edit" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Flux-2 Pro Edit
+                            <span class="rank-5">5位</span>
+                        </div>
+                        <span class="model-badge badge-edit">Image Editing</span>
+                        <div class="model-specs">
+                            <div>⏱️ 14.82秒</div>
+                            <div>📁 402KB (JPEG)</div>
+                            <div>📐 1200x896 px</div>
+                            <div>💰 高コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-c">C+</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                画像編集用。日本語テキスト完全に欠落。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flex -->
+                <div class="model-card">
+                    <img src="flux-2-flex.jpg" alt="Flux-2 Flex" class="model-image">
+                    <div class="model-content">
+                        <div class="model-title">
+                            Flux-2 Flex
+                            <span class="rank-6">6位</span>
+                        </div>
+                        <span class="model-badge badge-flex">Flex</span>
+                        <div class="model-specs">
+                            <div>⏱️ 21.30秒</div>
+                            <div>📁 206KB (JPEG)</div>
+                            <div>📐 1024x768 px</div>
+                            <div>💰 中コスト</div>
+                        </div>
+                        <div class="evaluation-summary">
+                            <div class="evaluation-score score-c">C</div>
+                            <div style="font-size: 0.95em; text-align: center; font-weight: 500;">
+                                最も遅い。日本語不可。情報正確性に課題。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 性能比較マトリックス</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>評価項目</th>
+                        <th>Text-to-Image</th>
+                        <th>LoRA</th>
+                        <th>Nano Banana</th>
+                        <th>Pro</th>
+                        <th>Pro Edit</th>
+                        <th>Flex</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>⚡ 生成速度</strong></td>
+                        <td class="winner">2.53秒 🥇</td>
+                        <td class="winner">2.09秒 🥇</td>
+                        <td>14.86秒</td>
+                        <td>10.81秒</td>
+                        <td>14.82秒</td>
+                        <td style="color: #dc3545;">21.30秒 🐌</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎨 画質</strong></td>
+                        <td class="winner">高 🥇</td>
+                        <td class="winner">高 🥇</td>
+                        <td class="winner">最高 🥇</td>
+                        <td class="winner">最高 🥇</td>
+                        <td>高</td>
+                        <td>中</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📝 情報正確性</strong></td>
+                        <td class="winner">優秀 🥇</td>
+                        <td class="winner">優秀 🥇</td>
+                        <td>良好</td>
+                        <td>中</td>
+                        <td style="color: #dc3545;">低</td>
+                        <td style="color: #dc3545;">低</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🇯🇵 日本語対応</strong></td>
+                        <td class="winner">優秀 🥇</td>
+                        <td class="winner">優秀 🥇</td>
+                        <td class="winner">優秀 🥇</td>
+                        <td>中</td>
+                        <td style="color: #dc3545;">不可</td>
+                        <td style="color: #dc3545;">不可</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📱 UI/Info適性</strong></td>
+                        <td class="winner">最適 🥇</td>
+                        <td>適</td>
+                        <td>やや適</td>
+                        <td style="color: #dc3545;">不適</td>
+                        <td style="color: #dc3545;">不適</td>
+                        <td style="color: #dc3545;">不適</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 ファイルサイズ</strong></td>
+                        <td>905KB</td>
+                        <td>877KB</td>
+                        <td>984KB</td>
+                        <td class="winner">214KB 🥇</td>
+                        <td class="winner">402KB</td>
+                        <td class="winner">206KB 🥇</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💰 コスパ</strong></td>
+                        <td class="winner">最高 🥇</td>
+                        <td class="winner">最高 🥇</td>
+                        <td>中</td>
+                        <td>低</td>
+                        <td>低</td>
+                        <td>中</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🎯 用途別おすすめモデル</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="emoji">⚡</div>
+                    <h4>最速生成</h4>
+                    <p><strong>Flux-2 LoRA</strong><br>2.09秒で生成。大量生成に最適</p>
+                </div>
+                <div class="summary-card">
+                    <div class="emoji">🎯</div>
+                    <h4>日本語インフォ</h4>
+                    <p><strong>Flux-2 Text-to-Image</strong><br>日本語情報の視覚化に最適</p>
+                </div>
+                <div class="summary-card">
+                    <div class="emoji">🖼️</div>
+                    <h4>最高画質</h4>
+                    <p><strong>Nano Banana Pro</strong><br>1200x896の高解像度</p>
+                </div>
+                <div class="summary-card">
+                    <div class="emoji">🎨</div>
+                    <h4>アート作品</h4>
+                    <p><strong>Flux-2 Pro</strong><br>写真のようなリアリティ</p>
+                </div>
+                <div class="summary-card">
+                    <div class="emoji">✂️</div>
+                    <h4>画像編集</h4>
+                    <p><strong>Flux-2 Pro Edit</strong><br>既存画像の編集に特化</p>
+                </div>
+                <div class="summary-card">
+                    <div class="emoji">💰</div>
+                    <h4>コスパ最強</h4>
+                    <p><strong>Flux-2 Text-to-Image</strong><br>速度×品質×コストの三冠</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 詳細評価分析</h2>
+
+            <div class="category-section">
+                <h3>🥇 Text-to-Image: 総合優勝 (A+)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>2.53秒と高速ながら最高品質</li>
+                    <li>日本語テキストを正確に表示</li>
+                    <li>インフォグラフィックとして最適なデザイン</li>
+                    <li>低コストで高コスパ</li>
+                </ul>
+                <p><strong>短所:</strong> Proに比べると描写の精緻さで若干劣る場合あり</p>
+                <p><strong>推奨用途:</strong> 日本語情報の視覚化、UIデザイン、インフォグラフィック</p>
+            </div>
+
+            <div class="category-section">
+                <h3>🥈 LoRA: 準優勝 (A)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>最速の2.09秒で生成</li>
+                    <li>スタイルの一貫性が抜群</li>
+                    <li>日本語対応良好</li>
+                    <li>カスタムスタイル適用可能</li>
+                </ul>
+                <p><strong>短所:</strong> Text-to-Imageに比べ情報整理面で若干劣る</p>
+                <p><strong>推奨用途:</strong> 大量生成、スタイル一貫性が重要なケース</p>
+            </div>
+
+            <div class="category-section">
+                <h3>🥉 Nano Banana Pro: 第3位 (B+)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>最高解像度1200x896</li>
+                    <li>Google Gemini 2.5 Flash搭載</li>
+                    <li>アーティスティックな表現力</li>
+                    <li>日本語対応良好</li>
+                </ul>
+                <p><strong>短所:</strong> 14.86秒とやや遅め、ファイルサイズ最大</p>
+                <p><strong>推奨用途:</strong> 高解像度が必要なアート作品、クリエイティブ制作</p>
+            </div>
+
+            <div class="category-section">
+                <h3>4位 Pro: 写真品質 (B)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>画像品質は最高級</li>
+                    <li>写真のようなリアリティ</li>
+                    <li>ファイルサイズ最小（214KB）</li>
+                </ul>
+                <p><strong>短所:</strong> インフォグラフィックには不向き、日本語テキストが欠落、高コスト</p>
+                <p><strong>推奨用途:</strong> 写真作品生成、リアルな風景描写</p>
+            </div>
+
+            <div class="category-section">
+                <h3>5位 Pro Edit: 専門特化 (C+)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>画像編集に特化</li>
+                    <li>既存画像の修正が可能</li>
+                </ul>
+                <p><strong>短所:</strong> 日本語テキスト完全に欠落、編集時間が14.82秒と遅め、高コスト</p>
+                <p><strong>推奨用途:</strong> 既存画像の編集・修正（日本語テキストを含まないもの）</p>
+            </div>
+
+            <div class="category-section">
+                <h3>6位 Flex: 課題あり (C)</h3>
+                <p><strong>長所:</strong></p>
+                <ul>
+                    <li>画像品質は許容範囲</li>
+                    <li>ファイルサイズが小さい（206KB）</li>
+                </ul>
+                <p><strong>短所:</strong> 21.30秒で最も遅い、日本語不可、情報正確性に課題</p>
+                <p><strong>推奨用途:</strong> 現時点では推奨困難。改善待ち。</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎓 総合評価と推奨事項</h2>
+            <div class="conclusion">
+                <h3>🏆 最終結論</h3>
+                <p><strong>総合優勝: Flux-2 Text-to-Image</strong></p>
+                <p>速度・品質・コストパフォーマンスの全てにおいて最高のバランスを誇ります。特に日本語インフォグラフィック生成において、他モデルを圧倒する性能を発揮します。</p>
+
+                <p><strong>用途別推奨:</strong></p>
+                <ul>
+                    <li><strong>日本語情報デザイン → Text-to-Image</strong> (日本語対応×速度×品質の三冠)</li>
+                    <li><strong>大量生成 → LoRA</strong> (最速の2.09秒)</li>
+                    <li><strong>高解像度アート → Nano Banana Pro</strong> (1200x896、最高画質)</li>
+                    <li><strong>写真作品 → Pro</strong> (リアリティ重視)</li>
+                    <li><strong>画像編集 → Pro Edit</strong> (編集専用)</li>
+                </ul>
+
+                <p><strong>⚠️ 注意点:</strong></p>
+                <ul>
+                    <li>Pro、Pro Edit、Flexは日本語テキスト表示に課題あり</li>
+                    <li>インフォグラフィック用途ではText-to-ImageかLoRAを推奨</li>
+                    <li>コストを重視する場合はText-to-ImageかLoRAが最適</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📈 技術仕様一覧</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>モデル</th>
+                        <th>ベース技術</th>
+                        <th>主な特徴</th>
+                        <th>出力形式</th>
+                        <th>推奨シーン</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Text-to-Image</strong></td>
+                        <td>FLUX.2 [dev]</td>
+                        <td>バランス型、acceleration対応</td>
+                        <td>PNG</td>
+                        <td>汎用的な画像生成、日本語インフォ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LoRA</strong></td>
+                        <td>FLUX.2 [dev] + LoRA</td>
+                        <td>カスタムスタイル、超高速</td>
+                        <td>PNG</td>
+                        <td>スタイル一貫性重視、大量生成</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nano Banana Pro</strong></td>
+                        <td>Gemini 2.5 Flash Image</td>
+                        <td>高解像度、Google最新技術</td>
+                        <td>PNG</td>
+                        <td>高解像度アート、クリエイティブ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pro</strong></td>
+                        <td>FLUX.2 [pro]</td>
+                        <td>最高品質、パラメータ制御</td>
+                        <td>JPEG</td>
+                        <td>プロフェッショナル用途、写真</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pro Edit</strong></td>
+                        <td>FLUX.2 [pro] Edit</td>
+                        <td>画像編集専用</td>
+                        <td>JPEG</td>
+                        <td>既存画像の編集・修正</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flex</strong></td>
+                        <td>FLUX.2 Flex</td>
+                        <td>柔軟性重視</td>
+                        <td>JPEG</td>
+                        <td>（改善待ち）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>Generated with Claude Code | MCP画像生成評価レポート #004 | 2025</p>
+            <p>6モデルの激突を徹底比較！最適なモデル選びの参考にしてください。</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -41,6 +41,21 @@ ContentsGenerator/
 
 ## 📈 最新評価結果
 
+### 評価 #004: Fluxシリーズ拡張比較評価（6モデル）
+- **実施日**: 2025年12月23日
+- **総合評価**: A (4.2/5.0)
+- **比較モデル**: Flux-2 Text-to-Image, Flux-2 Pro, Flux-2 Flex, Flux-2 LoRA, Flux-2 Pro Edit, Nano Banana Pro
+- **詳細レポート**: [evaluations/2025-12-23-flux-comparison-extended/](evaluations/2025-12-23-flux-comparison-extended/)
+- **総合優勝**: Flux-2 Text-to-Image（速度・品質・コスパの三冠王者）
+- **準優勝**: Flux-2 LoRA（最速2.09秒）
+- **第3位**: Nano Banana Pro（最高解像度1200x896）
+
+### 評価 #003: Flux-2モデル比較評価（4モデル）
+- **実施日**: 2025年12月22日
+- **総合評価**: A (4.0/5.0)
+- **比較モデル**: Flux-2 Text-to-Image, Flux-2 Pro, Flux-2 Flex, Flux-2 LoRA
+- **詳細レポート**: [evaluations/2025-12-22-flux-models-comparison/](evaluations/2025-12-22-flux-models-comparison/)
+
 ### 評価 #002: 盛岡市天気インフォグラフィック
 - **実施日**: 2025年12月22日
 - **総合評価**: B+ (3.8/5.0)
@@ -65,10 +80,16 @@ ContentsGenerator/
 ## ⚙️ 技術仕様
 
 ### 使用モデル
-- **モデル**: Nano Banana Pro (Gemini 2.5 Flash Image model)
-- **解像度**: 1K (1376x768) 標準
-- **フォーマット**: PNG
-- **アスペクト比**: 16:9 (ワイド)
+- **メインモデル**: Nano Banana Pro (Gemini 2.5 Flash Image model)
+- **比較モデル**:
+  - Flux-2 Text-to-Image (FLUX.2 [dev])
+  - Flux-2 Pro (FLUX.2 [pro])
+  - Flux-2 Flex
+  - Flux-2 LoRA (FLUX.2 [dev] + LoRA)
+  - Flux-2 Pro Edit (Image Editing)
+- **解像度**: 1K-2K 標準
+- **フォーマット**: PNG, JPEG
+- **アスペクト比**: 4:3, 16:9 (ワイド)
 
 ## 🎯 プロジェクト目標
 
@@ -80,10 +101,11 @@ ContentsGenerator/
 
 ## 📊 統計情報
 
-- **評価完了数**: 2件
-- **平均評価**: A (4.4/5.0)
-- **評価項目数**: 5項目
-- **平均生成時間**: 13.1秒
+- **評価完了数**: 4件
+- **比較モデル数**: 6モデル
+- **平均評価**: A (4.2/5.0)
+- **評価項目数**: 7項目
+- **平均生成時間**: 11.0秒
 
 ## 🤝 貢献
 
