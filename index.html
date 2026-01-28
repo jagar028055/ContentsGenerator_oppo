@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像生成練習記録</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-export {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #218838;
+        }
+
+        .records-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .records-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .records-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            color: #666;
+        }
+
+        .stats span {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .record-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+
+        .record-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .record-date {
+            font-size: 12px;
+            color: #999;
+            background: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .record-prompt {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .record-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #f0f0f0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .record-image img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .record-actions button {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .image-input-container {
+            margin-bottom: 20px;
+        }
+
+        .image-input-container input[type="file"] {
+            display: none;
+        }
+
+        .image-upload-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-label:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            max-width: 300px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 250px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .records-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .records-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 画像生成練習記録</h1>
+
+        <div class="input-section">
+            <form id="recordForm">
+                <div class="input-group">
+                    <label for="prompt">プロンプト</label>
+                    <textarea id="prompt" placeholder="画像生成に使用したプロンプトを入力してください..."></textarea>
+                </div>
+
+                <div class="input-group image-input-container">
+                    <label>生成された画像</label>
+                    <input type="file" id="imageInput" accept="image/*">
+                    <label for="imageInput" class="image-upload-label">
+                        📷 画像を選択（またはドラッグ＆ドロップ）
+                    </label>
+                    <img id="imagePreview" class="image-preview" alt="プレビュー">
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">✨ 記録を追加</button>
+                    <button type="button" class="btn-export" onclick="exportData()">💾 エクスポート</button>
+                    <button type="button" class="btn-secondary" onclick="importData()">📥 インポート</button>
+                    <button type="button" class="btn-danger" onclick="clearAllData()">🗑️ 全て削除</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="records-section">
+            <div class="records-header">
+                <h2>📚 記録一覧</h2>
+                <div class="stats">
+                    <span>総数: <strong id="totalCount">0</strong></span>
+                </div>
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 プロンプトを検索...">
+            </div>
+            <div id="recordsContainer" class="records-grid"></div>
+        </div>
+    </div>
+
+    <input type="file" id="importInput" accept=".json" style="display: none;">
+
+    <script>
+        let records = JSON.parse(localStorage.getItem('imageGenRecords') || '[]');
+        let currentImageData = null;
+
+        // 初期表示
+        renderRecords();
+
+        // フォーム送信
+        document.getElementById('recordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value.trim();
+
+            if (!prompt) {
+                alert('プロンプトを入力してください');
+                return;
+            }
+
+            const record = {
+                id: Date.now(),
+                prompt: prompt,
+                imageData: currentImageData,
+                createdAt: new Date().toISOString()
+            };
+
+            records.unshift(record);
+            saveRecords();
+            renderRecords();
+            resetForm();
+        });
+
+        // 画像選択
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageData = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = currentImageData;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 検索
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            renderRecords(e.target.value);
+        });
+
+        // 記録を表示
+        function renderRecords(searchTerm = '') {
+            const container = document.getElementById('recordsContainer');
+            let filteredRecords = records;
+
+            if (searchTerm) {
+                filteredRecords = records.filter(r =>
+                    r.prompt.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+
+            document.getElementById('totalCount').textContent = records.length;
+
+            if (filteredRecords.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <p>まだ記録がありません<br>最初の画像生成記録を追加してください！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredRecords.map(record => `
+                <div class="record-card">
+                    <div class="record-header">
+                        <span class="record-date">${formatDate(record.createdAt)}</span>
+                        <button class="btn-danger" onclick="deleteRecord(${record.id})" style="padding: 6px 12px; font-size: 12px;">削除</button>
+                    </div>
+                    <div class="record-prompt">${escapeHtml(record.prompt)}</div>
+                    <div class="record-image">
+                        ${record.imageData
+                            ? `<img src="${record.imageData}" alt="生成画像">`
+                            : '<span>画像なし</span>'
+                        }
+                    </div>
+                    <div class="record-actions">
+                        <button class="btn-secondary" onclick="copyPrompt(${record.id})">📋 プロンプトをコピー</button>
+                        <button class="btn-export" onclick="downloadImage(${record.id})">⬇️ 画像をダウンロード</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 記録を保存
+        function saveRecords() {
+            localStorage.setItem('imageGenRecords', JSON.stringify(records));
+        }
+
+        // 記録を削除
+        function deleteRecord(id) {
+            if (confirm('この記録を削除しますか？')) {
+                records = records.filter(r => r.id !== id);
+                saveRecords();
+                renderRecords();
+            }
+        }
+
+        // フォームをリセット
+        function resetForm() {
+            document.getElementById('prompt').value = '';
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+            currentImageData = null;
+        }
+
+        // プロンプトをコピー
+        function copyPrompt(id) {
+            const record = records.find(r => r.id === id);
+            if (record) {
+                navigator.clipboard.writeText(record.prompt).then(() => {
+                    alert('プロンプトをクリップボードにコピーしました！');
+                });
+            }
+        }
+
+        // 画像をダウンロード
+        function downloadImage(id) {
+            const record = records.find(r => r.id === id);
+            if (record && record.imageData) {
+                const link = document.createElement('a');
+                link.href = record.imageData;
+                link.download = `generated-image-${id}.png`;
+                link.click();
+            } else {
+                alert('画像がありません');
+            }
+        }
+
+        // データをエクスポート
+        function exportData() {
+            const dataStr = JSON.stringify(records, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `image-gen-records-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // データをインポート
+        function importData() {
+            document.getElementById('importInput').click();
+        }
+
+        document.getElementById('importInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedRecords = JSON.parse(e.target.result);
+                        if (Array.isArray(importedRecords)) {
+                            if (confirm(`${importedRecords.length}件の記録をインポートします。現在のデータとマージしますか？`)) {
+                                records = [...importedRecords, ...records];
+                                saveRecords();
+                                renderRecords();
+                                alert('インポートが完了しました！');
+                            }
+                        } else {
+                            alert('無効なファイル形式です');
+                        }
+                    } catch (err) {
+                        alert('ファイルの読み込みに失敗しました');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // 全データを削除
+        function clearAllData() {
+            if (confirm('⚠️ 全ての記録を削除しますか？この操作は取り消せません。')) {
+                if (confirm('本当に削除してもよろしいですか？')) {
+                    records = [];
+                    saveRecords();
+                    renderRecords();
+                    alert('全ての記録を削除しました');
+                }
+            }
+        }
+
+        // 日付フォーマット
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // HTMLエスケープ
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
