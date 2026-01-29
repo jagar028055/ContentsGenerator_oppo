@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃太郎紙芝居 - Momotaro Picture Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .metadata {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .scene {
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .scene:hover {
+            transform: translateY(-5px);
+        }
+
+        .scene-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .scene.scene-6 .scene-header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .scene-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scene-content {
+            padding: 30px;
+        }
+
+        .scene-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .scene-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .prompt-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .prompt-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .prompt-box p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .dialogue {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .dialogue .speaker {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .dialogue .line {
+            color: #856404;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .narrator {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .narrator .speaker {
+            color: #0c5460;
+        }
+
+        .narrator .line {
+            color: #0c5460;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #dc3545;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin-top: 40px;
+        }
+
+        .generation-log {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .generation-log h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .log-table th,
+        .log-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .log-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .log-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .scene-header {
+                font-size: 1.3rem;
+            }
+
+            .scene-title {
+                font-size: 1.4rem;
+            }
+
+            .scene-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍑 桃太郎紙芝居 🗡️</h1>
+            <p class="subtitle">Momotaro Picture Story - Generated with Flux-2 Pro</p>
+            <div class="metadata">
+                <p>生成日時: 2026-01-29 | モデル: Flux-2 Pro | スタイル: Studio Ghibli Inspired</p>
+                <p>シーン数: 7 | 成功: 6 | 失敗: 1</p>
+            </div>
+        </header>
+
+        <!-- Scene 1 -->
+        <div class="scene">
+            <div class="scene-header">シーン 1</div>
+            <img src="scene1_peach.jpg" alt="桃の誕生" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 1</span>
+                <h2 class="scene-title">桃の誕生 - The Peach's Birth</h2>
+                <span class="status success">✅ 生成成功 (11.29秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>A peaceful Japanese countryside scene with a clear stream flowing through green meadows. A beautiful large pink peach floats gently on the water. An old woman in traditional Japanese clothes is standing by the stream, looking surprised and delighted as she reaches for the peach. Soft morning sunlight, peaceful atmosphere, Studio Ghibli inspired art style, watercolor aesthetic, detailed landscape with cherry blossoms in the background.</p>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">むかしむかし、あるところに、おじいさんとおばあさんが住んでおりました。ある日、おばあさんが川で洗濯をしていると、川上から大きな桃が流れてきました。</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おばあさん</div>
+                    <div class="line">「わあ、なんて大きな桃が流れてくるのじゃろう。今日はいいことがありそうだわ」</div>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">おばあさんは桃を持ち帰ることにしました。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="scene">
+            <div class="scene-header">シーン 2</div>
+            <img src="scene2_birth.jpg" alt="桃太郎の誕生" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 2</span>
+                <h2 class="scene-title">桃太郎の誕生 - Momotaro's Birth</h2>
+                <span class="status success">✅ 生成成功 (10.37秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>Inside a cozy traditional Japanese wooden house with tatami mats. A large pink peach sits in the center of the room, magically splitting open. A cute baby boy (Momotaro) is emerging from the peach, glowing with warm golden light. The elderly couple (grandparents) look amazed and overjoyed. Warm, magical atmosphere with floating sparkles. Studio Ghibli inspired art style, soft colors, heartwarming scene.</p>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おじいさん</div>
+                    <div class="line">「なんと、桃から赤ちゃんが！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おばあさん</div>
+                    <div class="line">「わあ、なんて愛らしい赤ちゃんじゃろう。神様が授けてくださったに違いないわ」</div>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">桃を割ってみると、中から元気な男の子が飛び出してきました。二人は桃太郎と名付け、大切に育てました。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="scene">
+            <div class="scene-header">シーン 3</div>
+            <img src="scene3_departure.jpg" alt="成長と決意" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 3</span>
+                <h2 class="scene-title">成長と決意 - Growth and Determination</h2>
+                <span class="status success">✅ 生成成功 (12.26秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>A brave young Japanese boy, Momotaro, standing confidently on a hill overlooking the sea. He wears traditional Japanese samurai clothing with a determined expression. In the distance, the ominous Onigashima (Demon Island) is visible through the mist, with dark clouds gathering. Momotaro holds a samurai sword at his waist. The elderly grandparents stand behind him, waving goodbye with mixed pride and worry. Dramatic sunset sky, heroic pose, Studio Ghibli inspired art style, adventurous atmosphere.</p>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">桃太郎</div>
+                    <div class="line">「おじいさん、おばあさん。私は鬼ヶ島へ鬼退治に行きたいと思います。村の人が鬼に苦しめられています。私が行って、みんなを助けます！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おじいさん</div>
+                    <div class="line">「桃太郎、本当に鬼退治に行くのかい。危険な旅になるだろうけど、村を救うために頑張っておいで」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おばあさん</div>
+                    <div class="line">「きびだんごを作っておきますから、体に気をつけて」</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 4 -->
+        <div class="scene">
+            <div class="scene-header">シーン 4</div>
+            <img src="scene4_companions.jpg" alt="仲間との出会い" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 4</span>
+                <h2 class="scene-title">仲間との出会い - Meeting Companions</h2>
+                <span class="status success">✅ 生成成功 (9.89秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>Momotaro walking on a mountain path, handing out delicious golden millet dumplings (kibi dango) to three animal companions: a loyal dog wearing a red bandana, a clever monkey with a curious expression, and a beautiful pheasant with colorful feathers. All four companions look happy and excited. The path winds through beautiful Japanese mountains with cherry blossoms and pine trees. Bright, cheerful atmosphere, Studio Ghibli inspired art style, warm colors, friendship theme.</p>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">犬</div>
+                    <div class="line">「わんわん！桃太郎さん、そのきびだんごを一つくれたら、あなたについていきます！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">猿</div>
+                    <div class="line">「ききき！桃太郎さん、きびだんごを一つくれたら、鬼退治の手伝いをします！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">雉</div>
+                    <div class="line">「けんけん！桃太郎さん、私もきびだんごを一つくれたら、空から手伝います！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">桃太郎</div>
+                    <div class="line">「よし、みんなで力を合わせて鬼を退治しよう！」</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5 -->
+        <div class="scene">
+            <div class="scene-header">シーン 5</div>
+            <img src="scene5_onigashima.jpg" alt="鬼ヶ島到着" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 5</span>
+                <h2 class="scene-title">鬼ヶ島到着 - Arriving at Onigashima</h2>
+                <span class="status success">✅ 生成成功 (16.01秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>Momotaro and his three animal companions (dog, monkey, pheasant) arriving at the ominous Onigashima (Demon Island). The island has a dark, menacing fortress with jagged towers on a cliff overlooking stormy seas. Lightning strikes in the dark sky. Momotaro and his brave companions stand on the rocky shore, looking up at the demon castle with determination. Dramatic lighting, intense atmosphere, Studio Ghibli inspired art style, dark clouds, crashing waves, heroic composition.</p>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">桃太郎</div>
+                    <div class="line">「見てみんな、あれが鬼ヶ島だ。恐ろしい鬼が住んでいる城だ」</div>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">桃太郎と三人の仲間たちは、荒波を越えて鬼ヶ島に上陸しました。空には黒い雲が垂れ込め、鬼の城から不気味な音が聞こえてきます。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 6 (Failed) -->
+        <div class="scene scene-6">
+            <div class="scene-header">シーン 6</div>
+            <div class="scene-content">
+                <span class="scene-number">Scene 6</span>
+                <h2 class="scene-title">鬼退治 - The Battle (画像生成失敗)</h2>
+                <span class="status error">❌ 生成失敗 - コンテンツポリシー違反</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト（初回）</h3>
+                    <p>Epic battle scene at the demon castle. Momotaro wielding his samurai sword, fighting against menacing oni (demons) with red and blue skin, horns, and tiger-skin loincloths. The brave dog is biting a demon's leg, the monkey is throwing rocks, and the pheasant is pecking from above. Demons are falling back in defeat. Dynamic action composition with dramatic lighting and motion effects. The demon castle looms in the background. Studio Ghibli inspired art style, heroic battle scene, intense action.</p>
+                </div>
+
+                <div class="error-message">
+                    <strong>エラー内容:</strong> コンテンツポリシー違反（暴力的表現）<br>
+                    戦闘シーンの表現がコンテンツチェックに引っかかりました。台本のみご用意しています。
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">桃太郎</div>
+                    <div class="line">「鬼め、出てこい！村の人々を苦しめていた罪を償ってもらうぞ！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">鬼</div>
+                    <div class="line">「なんと勇ましい若者だ。しかし、我々に勝てるわけがない！」</div>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">桃太郎の刀の舞、犬の噛みつき、猿の石投げ、雉のついばみ。鬼たちは次々と倒れ、降参して宝物を差し出しました。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 7 -->
+        <div class="scene">
+            <div class="scene-header">シーン 7</div>
+            <img src="scene7_homecoming.jpg" alt="凱旋" class="scene-image">
+            <div class="scene-content">
+                <span class="scene-number">Scene 7</span>
+                <h2 class="scene-title">凱旋 - Triumphal Return</h2>
+                <span class="status success">✅ 生成成功 (15.50秒)</span>
+
+                <div class="prompt-box">
+                    <h3>📝 生成プロンプト</h3>
+                    <p>Heartwarming homecoming scene. Momotaro returns home triumphantly with his animal companions (dog, monkey, pheasant). He carries treasures from Onigashima including gold, colorful textiles, and precious items. The elderly grandparents run out to greet him with tears of joy. Their traditional Japanese house glows warm in the background. Cherry blossom petals float in the air. Beautiful golden sunset lighting. Studio Ghibli inspired art style, emotional reunion scene, warm colors, celebration and happiness.</p>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">桃太郎</div>
+                    <div class="line">「ただいま！おじいさん、おばあさん！鬼退治、成功しました！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おじいさん</div>
+                    <div class="line">「おお、桃太郎！よく帰ってきた！立派にやり遂げたな！」</div>
+                </div>
+
+                <div class="dialogue">
+                    <div class="speaker">おばあさん</div>
+                    <div class="line">「わあ、桃太郎、無事でよかったわ！」</div>
+                </div>
+
+                <div class="dialogue narrator">
+                    <div class="speaker">ナレーター</div>
+                    <div class="line">桃太郎はたくさんの宝物を持って帰り、おじいさんとおばあさんと幸せに暮らしました。村の人々も平和に暮らせるようになりました。<br><br><strong>めでたし、めでたし。</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generation Log -->
+        <div class="generation-log">
+            <h2>📊 画像生成ログ</h2>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>シーン</th>
+                        <th>状態</th>
+                        <th>生成時間</th>
+                        <th>Request ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1. 桃の誕生</td>
+                        <td>✅ 成功</td>
+                        <td>11.29秒</td>
+                        <td>79b56ffe-3b48-49db-9625-a402e4b5a112</td>
+                    </tr>
+                    <tr>
+                        <td>2. 桃太郎の誕生</td>
+                        <td>✅ 成功</td>
+                        <td>10.37秒</td>
+                        <td>05db23d2-11ce-4e15-87e0-7a424993c7fd</td>
+                    </tr>
+                    <tr>
+                        <td>3. 成長と決意</td>
+                        <td>✅ 成功</td>
+                        <td>12.26秒</td>
+                        <td>a38a9068-98ec-4cb6-bb43-4e57b7e5a80a</td>
+                    </tr>
+                    <tr>
+                        <td>4. 仲間との出会い</td>
+                        <td>✅ 成功</td>
+                        <td>9.89秒</td>
+                        <td>4bccf283-35d2-4f27-9d08-f757be0b3626</td>
+                    </tr>
+                    <tr>
+                        <td>5. 鬼ヶ島到着</td>
+                        <td>✅ 成功</td>
+                        <td>16.01秒</td>
+                        <td>e894f147-6432-44e9-9a79-c193582e955f</td>
+                    </tr>
+                    <tr>
+                        <td>6. 鬼退治</td>
+                        <td>❌ 失敗</td>
+                        <td>-</td>
+                        <td>ec4ce72d-e532-4252-ac7f-a0f1f26ec1a8</td>
+                    </tr>
+                    <tr>
+                        <td>7. 凱旋</td>
+                        <td>✅ 成功</td>
+                        <td>15.50秒</td>
+                        <td>ba409876-1004-4b7c-b668-eb4ece555075</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 20px; text-align: center; color: #555;">
+                <strong>成功率: 85.7% (6/7)</strong> | <strong>総生成時間: 75.32秒</strong>
+            </p>
+        </div>
+
+        <footer>
+            <p>🍑 桃太郎紙芝居 - Generated with Claude Code & Flux-2 Pro MCP 🗡️</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                All images generated using Flux-2 Pro | Studio Ghibli Inspired Style
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
