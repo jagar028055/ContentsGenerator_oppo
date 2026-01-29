@@ -355,6 +355,26 @@
         let records = JSON.parse(localStorage.getItem('imageGenRecords') || '[]');
         let currentImageData = null;
 
+        // 初期データ（ローカルストレージが空の場合のみ設定）
+        if (records.length === 0) {
+            const initialRecords = [
+                {
+                    id: 1,
+                    prompt: 'Beautiful landscape of Morioka city, Iwate Prefecture, Japan. Historic Morioka Castle ruins in Iwate Park with cherry blossoms in full bloom, traditional Japanese architecture, majestic Mt. Iwate in the background, clear blue sky, peaceful atmosphere, high quality, detailed, photorealistic',
+                    imageData: 'https://v3b.fal.media/files/b/0a8c428d/GfqE47WvXez1RLUjS_RbN_8Xd3M2R6.png',
+                    createdAt: '2026-01-29T09:00:00.000Z'
+                },
+                {
+                    id: 2,
+                    prompt: 'Professional tourism infographic poster for Morioka City, Iwate Prefecture, Japan. Vertical poster design with Japanese text introducing 4 major tourist spots: 盛岡城跡公園, 岩手銀行赤レンガ館, もりおか啄木・賢治青春館, 石割桜. Clean modern travel poster style.',
+                    imageData: 'https://v3b.fal.media/files/b/0a8c42b6/fTZw2YuNnX6Nr4WQ5cUDh_HOBR05rd.png',
+                    createdAt: '2026-01-29T09:30:00.000Z'
+                }
+            ];
+            records = initialRecords;
+            saveRecords();
+        }
+
         // 初期表示
         renderRecords();
 
